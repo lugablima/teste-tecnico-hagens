@@ -1,0 +1,37 @@
+version: '3'
+services: 
+  postgres_hagens_dev:
+    image: postgres:13-alpine
+    container_name: postgres_hagens_dev
+    restart: always
+    env_file: .env.dev
+    ports: 
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - postgres_hagens_data_dev:/var/lib/postgresql/data
+  
+  node_app_hagens_dev:
+    build: 
+      context: . 
+      dockerfile: Dockerfile.development
+    container_name: node_app_hagens_dev
+    ports: 
+      - ${PORT}:${PORT}
+    depends_on:
+      - postgres_hagens_dev
+    env_file: .env.dev
+    working_dir: /usr/src/hagens
+    command: bash -c "npm run migration:generate && npm run dev"
+    volumes:
+      - ./src:/usr/src/hagens/src
+      - ./prisma:/usr/src/hagens/prisma
+      - ./.env.dev:/usr/src/hagens/.env.dev
+      - ./.eslintrc.json:/usr/src/hagens/.eslintrc.json
+      - ./.prettierrc:/usr/src/hagens/.prettierrc
+      - ./tsconfig.eslint.json:/usr/src/hagens/tsconfig.eslint.json
+      - ./tsconfig.json:/usr/src/hagens/tsconfig.json
+      - ./package.json:/usr/src/hagens/package.json
+      - ./package-lock.json:/usr/src/hagens/package-lock.json
+  
+volumes:
+  postgres_hagens_data_dev:

@@ -1,0 +1,27 @@
+version: '3'
+services: 
+  postgres_hagens:
+    image: postgres:13-alpine
+    container_name: postgres_hagens
+    restart: always
+    env_file: .env
+    ports: 
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - postgres_hagens_data:/var/lib/postgresql/data
+  
+  node_app_hagens:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: node_app_hagens
+    ports: 
+      - ${PORT}:${PORT}
+    depends_on:
+      - postgres_hagens
+    env_file: .env
+    working_dir: /usr/src/hagens
+    command: bash -c "npm run migration:run && npm run start"
+  
+volumes:
+  postgres_hagens_data:
