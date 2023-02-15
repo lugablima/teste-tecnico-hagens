@@ -1,0 +1,12 @@
+{
+  "name": "teste-tecnico-hagens-back",
+  "version": "1.0.0",
+  "description": "API de um app para cadastro, edição e login de usuários",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Lucas Gabriel de Lima Silva",
+  "license": "ISC"
+}
