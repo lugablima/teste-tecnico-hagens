@@ -12,8 +12,9 @@
     "dev:compose": "docker-compose -f docker-compose.development.yml --env-file .env.dev",
     "dev:docker": "npm run dev:compose -- up -d",
     "dev:docker:down": "npm run dev:compose -- down",
+    "dev:docker:rebuild": "npm run dev:compose -- up --build -d",
     "dev:load-envs": "dotenv -e .env.dev",
-    "dev:prisma:studio": "npx prisma studio",
+    "dev:prisma:studio": "npm run dev:load-envs prisma studio",
     "prod:docker": "docker-compose up -d",
     "prod:docker:down": "docker-compose down"
   },
