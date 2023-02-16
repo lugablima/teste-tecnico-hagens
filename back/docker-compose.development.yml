@@ -21,7 +21,7 @@ services:
       - postgres_hagens_dev
     env_file: .env.dev
     working_dir: /usr/src/hagens
-    command: bash -c "npm run migration:generate && npm run dev"
+    command: bash -c "npm i && npm run migration:generate && npm run dev"
     volumes:
       - ./src:/usr/src/hagens/src
       - ./prisma:/usr/src/hagens/prisma
