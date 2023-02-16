@@ -2,14 +2,12 @@ import { User } from "@prisma/client";
 
 export type SignUpPayload = Omit<User, "id" | "createdAt" | "updatedAt">;
 
-export type SignInPayload = Omit<SignUpPayload, "name">;
+export type SignInPayload = Omit<SignUpPayload, "name" | "phone">;
 
 export interface JwtData {
-	userId: number;
+	userId: string;
 }
 
 export interface ResponseSignIn {
-	name: string;
 	token: string;
-	isAdmin: boolean;
 }

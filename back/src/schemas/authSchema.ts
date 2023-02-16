@@ -9,3 +9,8 @@ export const signUp = joi.object<authType.SignUpPayload>({
 	email: joi.string().email().max(70).required(),
 	password: joi.string().trim().min(6).required(),
 });
+
+export const signIn = joi.object<authType.SignInPayload>({
+	email: joi.string().email().max(70).required(),
+	password: joi.string().trim().min(6).required(),
+});
