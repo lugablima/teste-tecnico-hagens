@@ -1,5 +1,6 @@
 import { prisma } from "../database/postgres";
 import { SignUpPayload } from "../types/authType";
+import { EditUserPayload } from "../types/userType";
 
 export async function findByEmail(email: string) {
 	return prisma.user.findUnique({
@@ -19,4 +20,8 @@ export async function findById(userId: string) {
 
 export async function createOne(user: SignUpPayload) {
 	return prisma.user.create({ data: user });
+}
+
+export async function updateOne(userId: string, user: EditUserPayload) {
+	return prisma.user.update({ where: { id: userId }, data: user });
 }

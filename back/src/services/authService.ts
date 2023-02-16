@@ -5,7 +5,7 @@ import * as errorHandlingUtils from "../errors/errorHandlingUtils";
 import jwt from "jsonwebtoken";
 import { encrypt } from "../utils/cryptographyUtils";
 
-async function validateIfEmailDoesNotExist(email: string): Promise<void> {
+export async function validateIfEmailDoesNotExist(email: string): Promise<void> {
 	const emailAlreadyExists = await userRepository.findByEmail(email);
 
 	if (emailAlreadyExists) {
@@ -13,13 +13,13 @@ async function validateIfEmailDoesNotExist(email: string): Promise<void> {
 	}
 }
 
-function unformatPhone(phone: string): string {
+export function unformatPhone(phone: string): string {
 	const regexUnformatPhone = /[\(\)\-\s]/g;
 
 	return phone.replace(regexUnformatPhone, "");
 }
 
-async function generateHashPassword(password: string): Promise<string> {
+export async function generateHashPassword(password: string): Promise<string> {
 	const salt = await bcrypt.genSalt();
 	const hashedPassword = await bcrypt.hash(password, salt);
 
