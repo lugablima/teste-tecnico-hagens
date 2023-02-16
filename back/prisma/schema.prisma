@@ -13,8 +13,8 @@ datasource db {
 model User {
   id        String   @id @default(uuid())
   name      String   @db.VarChar(70)
-  phone     String   @db.VarChar(11)
-  email     String   @unique @db.VarChar(70)
+  phone     String
+  email     String   @unique
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
