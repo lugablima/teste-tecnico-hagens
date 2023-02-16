@@ -3,6 +3,7 @@ import * as authType from "../types/authType";
 import * as userRepository from "../repositories/userRepository";
 import * as errorHandlingUtils from "../errors/errorHandlingUtils";
 import jwt from "jsonwebtoken";
+import { encrypt } from "../utils/cryptographyUtils";
 
 async function validateIfEmailDoesNotExist(email: string): Promise<void> {
 	const emailAlreadyExists = await userRepository.findByEmail(email);
@@ -12,10 +13,10 @@ async function validateIfEmailDoesNotExist(email: string): Promise<void> {
 	}
 }
 
-function formatPhone(phone: string): string {
-	const regexPhoneField = /[\(\)\-\s]/g;
+function unformatPhone(phone: string): string {
+	const regexUnformatPhone = /[\(\)\-\s]/g;
 
-	return phone.replace(regexPhoneField, "");
+	return phone.replace(regexUnformatPhone, "");
 }
 
 async function generateHashPassword(password: string): Promise<string> {
@@ -48,11 +49,10 @@ function generateJwtToken(userId: string): string {
 export async function signUp(userInfo: authType.SignUpPayload): Promise<void> {
 	await validateIfEmailDoesNotExist(userInfo.email);
 
-	userInfo.phone = formatPhone(userInfo.phone);
-
 	const hashedPassword = await generateHashPassword(userInfo.password);
+	const unformatedPhone = unformatPhone(userInfo.phone);
 
-	await userRepository.createOne({ ...userInfo, password: hashedPassword });
+	await userRepository.createOne({ ...userInfo, password: hashedPassword, phone: encrypt(unformatedPhone) });
 }
 
 export async function signIn(userInfo: authType.SignInPayload): Promise<authType.ResponseSignIn> {
