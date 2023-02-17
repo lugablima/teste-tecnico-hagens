@@ -1,10 +1,25 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useFonts, Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
+import { Poppins_700Bold } from '@expo-google-fonts/poppins';
+import Loading from './src/components/Loading';
+
 export default function App() {
+
+  const [fontsLoaded] = useFonts({
+    Inter_400Regular, 
+    Inter_600SemiBold,
+    Poppins_700Bold
+  });
+
+  if(!fontsLoaded) {
+    return <Loading />;
+  }
+
   return (
     <View style={styles.container}>
-      <Text>Hello world!</Text>
+      <Text style={styles.text}>MyAuth!</Text>
       <StatusBar style="auto" />
     </View>
   );
@@ -17,4 +32,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  text: {
+    fontFamily: "Poppins_700Bold",
+    fontSize: 20,
+  }
 });
