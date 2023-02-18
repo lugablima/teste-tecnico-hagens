@@ -12,7 +12,7 @@ module.exports = {
       fontFamily: {
         regular: "Inter_400Regular",
         semibold: "Inter_600SemiBold",
-        bold: "Poppins_700Bold"
+        bold: "Inter_700Bold"
       }
     },
   },
