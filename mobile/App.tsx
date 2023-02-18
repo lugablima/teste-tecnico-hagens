@@ -1,5 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from 'react-native';
 
 import { useFonts, Inter_400Regular, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
 import Loading from './src/components/Loading';
@@ -19,8 +18,8 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>MyAuth!</Text>
-      <StatusBar style="auto" />
-    </View>
+      <StatusBar barStyle="light-content" backgroundColor="black" />
+    </>
   );
 }
 
