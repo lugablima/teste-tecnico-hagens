@@ -4,7 +4,7 @@ import { Card } from "../components/Card";
 import { ProfileHeader } from "../components/ProfileHeader";
 
 export function Home() {
-    return(
+    return (
         <>
             <Header />
             <View className="flex-1 bg-background px-5">
