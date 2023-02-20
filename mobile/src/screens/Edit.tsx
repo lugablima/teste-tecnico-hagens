@@ -1,4 +1,5 @@
 import {
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
   ScrollView,
@@ -11,13 +12,24 @@ import { Form, FormData } from "../components/Form";
 import { maskPhone, schema, SignUpCredentials } from "./SignUp";
 import { useNavigation } from "@react-navigation/native";
 import { StackProps } from "../../App";
+import { api } from "../config/axios";
+import { UserContext, useUserContext } from "../contexts/UserContext";
+import { isAxiosError } from "axios";
 
 export function Edit() {
   const navigation = useNavigation<StackProps>();
+  const { user, setUser, config } = useUserContext() as UserContext;
 
-  function handleEdit(data: SignUpCredentials) {
-    console.log(data);
-    navigation.navigate("Home");
+  async function handleEdit(data: SignUpCredentials) {
+    try {
+      const { data: message } = await api.patch("/users", data, config);
+
+      setUser(data);
+      Alert.alert(message);
+      navigation.navigate("Home"); 
+    } catch (error) {
+      if(isAxiosError(error)) Alert.alert(error.response?.data);
+    }
   }
   
   const formData: FormData<SignUpCredentials> = {
@@ -28,6 +40,7 @@ export function Edit() {
         controllerName: "name",
         placeholder: "Digite seu nome completo",
         maxLength: 70,
+        defaultValue: user?.name
       },
       {
         label: "Telefone",
@@ -36,6 +49,7 @@ export function Edit() {
         maskField: maskPhone,
         maxLength: 15,
         keyboardType: "numeric",
+        defaultValue: user?.phone
       },
       {
         label: "E-mail",
@@ -43,11 +57,12 @@ export function Edit() {
         placeholder: "exemplo@email.com",
         keyboardType: "email-address",
         autoCapitalize: "none",
+        defaultValue: user?.email
       },
       {
         label: "Senha",
         controllerName: "password",
-        placeholder: "Digite sua senha",
+        placeholder: "Digite sua nova senha",
         secureTextEntry: true,
         autoCapitalize: "none",
       },

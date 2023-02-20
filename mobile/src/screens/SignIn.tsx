@@ -1,5 +1,6 @@
 import * as yup from "yup";
 import {
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
@@ -11,6 +12,9 @@ import { Form, FormData } from "../components/Form";
 import { FormFooter } from "../components/FormFooter";
 import { Header, StarImage } from "./SignUp";
 import { StackProps } from "../../App";
+import { api } from "../config/axios";
+import { UserContext, useUserContext } from "../contexts/UserContext";
+import { isAxiosError } from "axios";
 
 interface SignInCredentials {
   email: string;
@@ -19,6 +23,7 @@ interface SignInCredentials {
 
 export function SignIn() {
   const navigation = useNavigation<StackProps>();
+  const { setToken } = useUserContext() as UserContext;
 
   const schema = yup.object<SignInCredentials>({
     email: yup.string().email("E-mail inválido").required("Campo obrigatório"),
@@ -28,9 +33,16 @@ export function SignIn() {
       .required("Campo obrigatório"),
   });
 
-  function handleSignIn(data: SignInCredentials) {
-    console.log(data);
-    navigation.navigate("Home");
+  async function handleSignIn(data: SignInCredentials) {
+    try {
+      const { data: res } = await api.post("/signin", data);
+
+      setToken(res.token);
+      
+      navigation.navigate("Edit"); 
+    } catch (error) {
+      if(isAxiosError(error)) Alert.alert(error.response?.data);
+    }
   }
 
   const formData: FormData<SignInCredentials> = {

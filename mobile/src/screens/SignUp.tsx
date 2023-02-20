@@ -5,6 +5,7 @@ import {
   TouchableWithoutFeedback,
   Text,
   View,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -12,6 +13,9 @@ import { Form, FormData } from "../components/Form";
 import { FormFooter } from "../components/FormFooter";
 import Star from "../assets/star.svg";
 import { StackProps } from "../../App";
+import { api } from "../config/axios";
+import { isAxiosError } from "axios";
+import { UserContext, useUserContext } from "../contexts/UserContext";
 
 export interface SignUpCredentials {
   name: string;
@@ -66,10 +70,20 @@ export const schema = yup.object<SignUpCredentials>({
 
 export function SignUp() {
   const navigation = useNavigation<StackProps>();
+  const { setUser, signInUser } = useUserContext() as UserContext;
 
-  function handleSignUp(data: SignUpCredentials) {
-    console.log(data);
-    navigation.navigate("Home");
+  async function handleSignUp(data: SignUpCredentials) {
+    try {
+      const { data: message } = await api.post("/signup", data);
+
+      setUser(data);
+      await signInUser();
+      
+      Alert.alert(message);
+      navigation.navigate("Home"); 
+    } catch (error) {
+      if(isAxiosError(error)) Alert.alert(error.response?.data);
+    }
   }
   
   const formData: FormData<SignUpCredentials> = {
