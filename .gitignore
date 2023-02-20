@@ -8,6 +8,8 @@ back/.prettier*
 mobile/node_modules/
 mobile/.expo/
 mobile/dist/
+mobile/.env*
+!mobile/.env.example
 mobile/npm-debug.*
 mobile/*.jks
 mobile/*.p8
