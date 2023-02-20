@@ -1,9 +1,10 @@
-import { Pressable, PressableProps, Text } from "react-native";
+import { TouchableOpacityProps, Text, TouchableOpacity } from "react-native";
 
-interface ButtonProps extends PressableProps {
+export interface ButtonProps extends TouchableOpacityProps {
     title: string;
     buttonStyle: "light" | "dark";
-    mb?: number; 
+    mt?: number; 
+    mb?: number;
 }
 
 export function Button(props: ButtonProps) {
@@ -13,10 +14,11 @@ export function Button(props: ButtonProps) {
         borderColor = props.buttonStyle === "light" ? "#747474" : undefined;
 
     return (
-            <Pressable
+            <TouchableOpacity
                 onPress={props.onPress}
+                activeOpacity={0.7}
                 className="w-full max-w-sm h-14 rounded-lg flex flex-row items-center justify-center"
-                style={{ backgroundColor: bgColor, borderWidth, borderColor, marginBottom: props.mb }}
+                style={{ backgroundColor: bgColor, borderWidth, borderColor, marginTop: props.mt, marginBottom: props.mb }}
             >
                 <Text
                     className="font-semibold text-base"
@@ -24,10 +26,11 @@ export function Button(props: ButtonProps) {
                 >
                     {props.title}
                 </Text>
-            </Pressable>
+            </TouchableOpacity>
     );
 }
 
 Button.defaultProps = {
+    mt: 0,
     mb: 20
 }
