@@ -5,10 +5,12 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import { Form, FormData } from "../components/Form";
 import { FormFooter } from "../components/FormFooter";
 import { Header, StarImage } from "./SignUp";
+import { StackProps } from "../../App";
 
 interface SignInCredentials {
   email: string;
@@ -16,7 +18,7 @@ interface SignInCredentials {
 }
 
 export function SignIn() {
-  const phoneRegex = /^\([1-9]{2}\) [1-9]{1}[0-9]{4}\-[0-9]{4}$/;
+  const navigation = useNavigation<StackProps>();
 
   const schema = yup.object<SignInCredentials>({
     email: yup.string().email("E-mail inválido").required("Campo obrigatório"),
@@ -26,12 +28,13 @@ export function SignIn() {
       .required("Campo obrigatório"),
   });
 
-  function handleSignUp(data: SignInCredentials) {
+  function handleSignIn(data: SignInCredentials) {
     console.log(data);
+    navigation.navigate("Home");
   }
 
   const formData: FormData<SignInCredentials> = {
-    onSubmit: handleSignUp,
+    onSubmit: handleSignIn,
     inputs: [
       {
         label: "E-mail",
@@ -63,7 +66,7 @@ export function SignIn() {
           <StarImage />
           <Header text="Entrar" />
           <Form<SignInCredentials> schema={schema} formData={formData} />
-          <FormFooter text="Não tem uma conta?" strong="Criar conta" />
+          <FormFooter text="Não tem uma conta?" strong="Criar conta" onPress={() => navigation.navigate("SignUp")} />
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </View>

@@ -1,13 +1,13 @@
-import { Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, TouchableOpacityProps } from "react-native";
 
-interface FormFooterProps {
+interface FormFooterProps extends TouchableOpacityProps {
   text: string;
   strong: string;
 }
 
-export function FormFooter({ text, strong }: FormFooterProps) {
+export function FormFooter({ text, strong, onPress }: FormFooterProps) {
   return (
-    <TouchableOpacity activeOpacity={0.7}>
+    <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
       <Text className="font-regular text-sm text-black/70 self-center">
         {text}
         <Text> </Text>

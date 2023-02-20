@@ -6,10 +6,12 @@ import {
   Text,
   View,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import { Form, FormData } from "../components/Form";
 import { FormFooter } from "../components/FormFooter";
 import Star from "../assets/star.svg";
+import { StackProps } from "../../App";
 
 export interface SignUpCredentials {
   name: string;
@@ -62,51 +64,54 @@ export const schema = yup.object<SignUpCredentials>({
     .required("Campo obrigatório"),
 });
 
-function handleSignUp(data: SignUpCredentials) {
-  console.log(data);
-}
-
-export const formData: FormData<SignUpCredentials> = {
-  onSubmit: handleSignUp,
-  inputs: [
-    {
-      label: "Nome completo",
-      controllerName: "name",
-      placeholder: "Digite seu nome completo",
-      maxLength: 70,
-    },
-    {
-      label: "Telefone",
-      controllerName: "phone",
-      placeholder: "(00) 00000-0000",
-      maskField: maskPhone,
-      maxLength: 15,
-      keyboardType: "numeric",
-    },
-    {
-      label: "E-mail",
-      controllerName: "email",
-      placeholder: "exemplo@email.com",
-      keyboardType: "email-address",
-      autoCapitalize: "none",
-    },
-    {
-      label: "Senha",
-      controllerName: "password",
-      placeholder: "Digite sua senha",
-      secureTextEntry: true,
-      autoCapitalize: "none",
-    },
-  ],
-  button: {
-    buttonStyle: "dark",
-    title: "Entrar",
-    mt: 20,
-    mb: 20,
-  },
-};
-
 export function SignUp() {
+  const navigation = useNavigation<StackProps>();
+
+  function handleSignUp(data: SignUpCredentials) {
+    console.log(data);
+    navigation.navigate("Home");
+  }
+  
+  const formData: FormData<SignUpCredentials> = {
+    onSubmit: handleSignUp,
+    inputs: [
+      {
+        label: "Nome completo",
+        controllerName: "name",
+        placeholder: "Digite seu nome completo",
+        maxLength: 70,
+      },
+      {
+        label: "Telefone",
+        controllerName: "phone",
+        placeholder: "(00) 00000-0000",
+        maskField: maskPhone,
+        maxLength: 15,
+        keyboardType: "numeric",
+      },
+      {
+        label: "E-mail",
+        controllerName: "email",
+        placeholder: "exemplo@email.com",
+        keyboardType: "email-address",
+        autoCapitalize: "none",
+      },
+      {
+        label: "Senha",
+        controllerName: "password",
+        placeholder: "Digite sua senha",
+        secureTextEntry: true,
+        autoCapitalize: "none",
+      },
+    ],
+    button: {
+      buttonStyle: "dark",
+      title: "Entrar",
+      mt: 20,
+      mb: 20,
+    },
+  };
+
   return (
     <View className="w-screen flex-1 px-5 pt-12">
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -114,7 +119,7 @@ export function SignUp() {
           <StarImage />
           <Header text="Criar conta" />
           <Form<SignUpCredentials> schema={schema} formData={formData} />
-          <FormFooter text="Já tem uma conta?" strong="Entrar" />
+          <FormFooter text="Já tem uma conta?" strong="Entrar" onPress={() => navigation.navigate("SignIn")}/>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </View>
