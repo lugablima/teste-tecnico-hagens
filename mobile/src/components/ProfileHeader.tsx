@@ -7,7 +7,7 @@ interface ProfileHeaderProps {
 
 export function ProfileHeader({ header }: ProfileHeaderProps) {
     return(
-        <View className="flex flex-col items-center gap-y-6 mt-6 mb-6">
+        <View className="items-center gap-y-6 mt-6 mb-6">
             <Text className="font-bold text-3xl text-black">{ header }</Text>
             <Ionicons name="md-person-circle" size={150} />
         </View>
