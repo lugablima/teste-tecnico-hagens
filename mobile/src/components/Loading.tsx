@@ -1,8 +1,8 @@
 import { ActivityIndicator, View } from "react-native";
 
-export default function Loading() {
+export function Loading() {
     return (
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fff" }}>
+        <View className="flex-1 items-center justify-center bg-background">
             <ActivityIndicator color="#000"/>
         </View>
     );
