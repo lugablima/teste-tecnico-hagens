@@ -10,18 +10,22 @@ import { Header } from "../components/Header";
 import { ProfileHeader } from "../components/ProfileHeader";
 import { Form, FormData } from "../components/Form";
 import { maskPhone, schema, SignUpCredentials } from "./SignUp";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackProps } from "../../App";
 import { api } from "../config/axios";
 import { UserContext, useUserContext } from "../contexts/UserContext";
 import { isAxiosError } from "axios";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Menu } from "./Menu";
 
 export function Edit() {
   const navigation = useNavigation<StackProps>();
   const { user, setUser, config } = useUserContext() as UserContext;
   const [showMenu, setShowMenu] = useState<boolean>(false);
+
+  useFocusEffect(useCallback(() => {
+    setShowMenu(false);
+  }, []));
 
   async function handleEdit(data: SignUpCredentials) {
     try {
