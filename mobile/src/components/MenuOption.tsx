@@ -1,31 +1,25 @@
 import { Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-
-import { StackProps } from "../../App";
 
 interface MenuOptionProps {
   label: string;
   iconName: "person-outline" | "settings-outline" | "exit-outline";
   iconSize: number;
-  destinationScreen?: "Home" | "Edit";
+  onPressFunction: (() => void) | (() => Promise<void>);
 }
 
 export function MenuOption({
   label,
   iconName,
   iconSize,
-  destinationScreen,
+  onPressFunction,
 }: MenuOptionProps) {
-  const navigation = useNavigation<StackProps>();
-  const destinationFunction =
-    destinationScreen && (() => navigation.navigate(destinationScreen));
 
   return (
     <TouchableOpacity
       activeOpacity={0.6}
       className="w-full h-14 px-5 bg-transparent flex-row items-center justify-between border-b border-b-black"
-      onPress={destinationFunction}
+      onPress={onPressFunction}
     >
       <Ionicons name={iconName} size={iconSize} />
       <Text className="font-semibold text-sm text-black">{label}</Text>
