@@ -39,7 +39,7 @@ export function SignIn() {
 
       setToken(res.token);
       
-      navigation.navigate("Edit"); 
+      navigation.navigate("Home"); 
     } catch (error) {
       if(isAxiosError(error)) Alert.alert(error.response?.data);
     }

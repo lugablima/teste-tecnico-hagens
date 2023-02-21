@@ -15,10 +15,13 @@ import { StackProps } from "../../App";
 import { api } from "../config/axios";
 import { UserContext, useUserContext } from "../contexts/UserContext";
 import { isAxiosError } from "axios";
+import { useState } from "react";
+import { Menu } from "./Menu";
 
 export function Edit() {
   const navigation = useNavigation<StackProps>();
   const { user, setUser, config } = useUserContext() as UserContext;
+  const [showMenu, setShowMenu] = useState<boolean>(false);
 
   async function handleEdit(data: SignUpCredentials) {
     try {
@@ -77,8 +80,9 @@ export function Edit() {
 
   return (
     <>
-      <Header />
-      <ScrollView keyboardShouldPersistTaps="always">
+      <Header setShowMenu={setShowMenu} />
+      {showMenu && <Menu setShowMenu={setShowMenu} />}
+      <ScrollView keyboardShouldPersistTaps="always" className="mt-16">
         <View className="w-screen flex-1 bg-background px-5">
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <KeyboardAvoidingView behavior="position" enabled>
