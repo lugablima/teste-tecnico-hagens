@@ -8,6 +8,7 @@ import {
   Alert,
 } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import uuid from "react-native-uuid";
 
 import { Form, FormData } from "../components/Form";
 import { FormFooter } from "../components/FormFooter";
@@ -99,12 +100,14 @@ export function SignUp() {
     onSubmit: handleSignUp,
     inputs: [
       {
+        id: uuid.v4() as string,
         label: "Nome completo",
         controllerName: "name",
         placeholder: "Digite seu nome completo",
         maxLength: 70,
       },
       {
+        id: uuid.v4() as string,
         label: "Telefone",
         controllerName: "phone",
         placeholder: "(00) 00000-0000",
@@ -113,6 +116,7 @@ export function SignUp() {
         keyboardType: "numeric",
       },
       {
+        id: uuid.v4() as string,
         label: "E-mail",
         controllerName: "email",
         placeholder: "exemplo@email.com",
@@ -120,6 +124,7 @@ export function SignUp() {
         autoCapitalize: "none",
       },
       {
+        id: uuid.v4() as string,
         label: "Senha",
         controllerName: "password",
         placeholder: "Digite sua senha",

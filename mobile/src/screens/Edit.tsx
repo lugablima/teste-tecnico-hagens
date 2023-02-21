@@ -6,6 +6,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import uuid from "react-native-uuid";
+
 import { Header } from "../components/Header";
 import { ProfileHeader } from "../components/ProfileHeader";
 import { Form, FormData } from "../components/Form";
@@ -43,6 +45,7 @@ export function Edit() {
     onSubmit: handleEdit,
     inputs: [
       {
+        id: uuid.v4() as string,
         label: "Nome completo",
         controllerName: "name",
         placeholder: "Digite seu nome completo",
@@ -50,6 +53,7 @@ export function Edit() {
         defaultValue: user?.name
       },
       {
+        id: uuid.v4() as string,
         label: "Telefone",
         controllerName: "phone",
         placeholder: "(00) 00000-0000",
@@ -59,6 +63,7 @@ export function Edit() {
         defaultValue: user?.phone
       },
       {
+        id: uuid.v4() as string,
         label: "E-mail",
         controllerName: "email",
         placeholder: "exemplo@email.com",
@@ -67,6 +72,7 @@ export function Edit() {
         defaultValue: user?.email
       },
       {
+        id: uuid.v4() as string,
         label: "Senha",
         controllerName: "password",
         placeholder: "Digite sua nova senha",

@@ -7,6 +7,7 @@ import {
   View,
 } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import uuid from "react-native-uuid";
 
 import { Form, FormData } from "../components/Form";
 import { FormFooter } from "../components/FormFooter";
@@ -56,6 +57,7 @@ export function SignIn() {
     onSubmit: handleSignIn,
     inputs: [
       {
+        id: uuid.v4() as string,
         label: "E-mail",
         controllerName: "email",
         placeholder: "exemplo@email.com",
@@ -63,6 +65,7 @@ export function SignIn() {
         autoCapitalize: "none",
       },
       {
+        id: uuid.v4() as string,
         label: "Senha",
         controllerName: "password",
         placeholder: "Digite sua senha",
