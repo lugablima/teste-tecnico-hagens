@@ -12,9 +12,7 @@ import { Form, FormData } from "../components/Form";
 import { FormFooter } from "../components/FormFooter";
 import { Header, StarImage } from "./SignUp";
 import { StackProps } from "../../App";
-import { api } from "../config/axios";
 import { UserContext, useUserContext } from "../contexts/UserContext";
-import { isAxiosError } from "axios";
 import { useCallback } from "react";
 
 export interface SignInCredentials {
