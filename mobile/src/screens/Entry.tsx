@@ -2,11 +2,20 @@ import { Text, View } from "react-native";
 import Shine from "../assets/shiny-shape.svg";
 import { Button } from "../components/Button";
 
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackProps } from "../../App";
+import { useCallback } from "react";
+import { UserContext, useUserContext } from "../contexts/UserContext";
 
 export function Entry() {
     const navigation =  useNavigation<StackProps>();
+    const { token } = useUserContext() as UserContext;
+
+    useFocusEffect(useCallback(() => {
+        if(token) {
+            navigation.navigate("Home");
+        }
+    }, [token]));
 
     return (
         <View className="flex-1 items-center bg-background px-5 pt-32">

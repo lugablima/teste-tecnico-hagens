@@ -6,9 +6,12 @@ import {
   ReactNode,
   Dispatch,
   SetStateAction,
+  useEffect,
 } from "react";
 import { Alert } from "react-native";
 import { api } from "../config/axios";
+import { SignInCredentials } from "../screens/SignIn";
+import { fetchAsyncStorageToken, setAsyncStorageToken } from "../utils/asyncStorageUtils";
 
 interface UserProviderProps {
   children: ReactNode;
@@ -27,8 +30,9 @@ export interface UserContext {
   token: string | null;
   setToken: Dispatch<SetStateAction<string | null>>;
   config: AxiosRequestConfig;
-  signInUser: () => Promise<void>;
+  signInUser: (data: SignInCredentials) => Promise<void>;
   getUserInfos: () => Promise<void>;
+  resetUserAndTokenStates: () => void;
 }
 
 const UserContext = createContext<UserContext | null>(null);
@@ -45,16 +49,13 @@ export function UserProvider({ children }: UserProviderProps) {
     },
   };
 
-  async function signInUser() {
+  async function signInUser(data: SignInCredentials) {
     try {
-      const { data } = await api.post("/signin", {
-        email: user?.email,
-        password: user?.password,
-      });
+      const { data: res } = await api.post("/signin", data);
 
-      setToken(data.token);
+      setToken(res.token);
     } catch (error) {
-      if (isAxiosError(error)) Alert.alert(error.response?.data.message);
+      if (isAxiosError(error)) throw new Error(error.response?.data);
     }
   }
 
@@ -67,9 +68,25 @@ export function UserProvider({ children }: UserProviderProps) {
     }
   }
 
+  function resetUserAndTokenStates() {
+    setUser(null);
+    setToken(null);
+  }
+
+  useEffect(() => {
+    fetchAsyncStorageToken()
+      .then((token) => setToken(token));
+  }, []);
+
+  useEffect(() => {
+    if(token) {
+      setAsyncStorageToken(token);
+    }
+  }, [token]);
+
   return (
     <UserContext.Provider
-      value={{ user, setUser, token, setToken, config, signInUser, getUserInfos }}
+      value={{ user, setUser, token, setToken, config, signInUser, getUserInfos, resetUserAndTokenStates }}
     >
       {children}
     </UserContext.Provider>

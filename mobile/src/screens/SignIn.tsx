@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 import { Form, FormData } from "../components/Form";
 import { FormFooter } from "../components/FormFooter";
@@ -15,15 +15,24 @@ import { StackProps } from "../../App";
 import { api } from "../config/axios";
 import { UserContext, useUserContext } from "../contexts/UserContext";
 import { isAxiosError } from "axios";
+import { useCallback } from "react";
 
-interface SignInCredentials {
+export interface SignInCredentials {
   email: string;
   password: string;
 }
 
 export function SignIn() {
   const navigation = useNavigation<StackProps>();
-  const { setToken } = useUserContext() as UserContext;
+  const { token, signInUser } = useUserContext() as UserContext;
+
+  useFocusEffect(
+    useCallback(() => {
+      if (token) {
+        navigation.navigate("Home");
+      }
+    }, [token])
+  );
 
   const schema = yup.object<SignInCredentials>({
     email: yup.string().email("E-mail inválido").required("Campo obrigatório"),
@@ -35,13 +44,13 @@ export function SignIn() {
 
   async function handleSignIn(data: SignInCredentials) {
     try {
-      const { data: res } = await api.post("/signin", data);
-
-      setToken(res.token);
+      await signInUser(data);
       
-      navigation.navigate("Home"); 
+      navigation.navigate("Home");
     } catch (error) {
-      if(isAxiosError(error)) Alert.alert(error.response?.data);
+      if(error instanceof Error) {
+        Alert.alert(error.message);
+      }
     }
   }
 
@@ -78,7 +87,11 @@ export function SignIn() {
           <StarImage />
           <Header text="Entrar" />
           <Form<SignInCredentials> schema={schema} formData={formData} />
-          <FormFooter text="Não tem uma conta?" strong="Criar conta" onPress={() => navigation.navigate("SignUp")} />
+          <FormFooter
+            text="Não tem uma conta?"
+            strong="Criar conta"
+            onPress={() => navigation.navigate("SignUp")}
+          />
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </View>

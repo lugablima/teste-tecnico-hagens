@@ -7,7 +7,7 @@ import {
   View,
   Alert,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 import { Form, FormData } from "../components/Form";
 import { FormFooter } from "../components/FormFooter";
@@ -16,6 +16,7 @@ import { StackProps } from "../../App";
 import { api } from "../config/axios";
 import { isAxiosError } from "axios";
 import { UserContext, useUserContext } from "../contexts/UserContext";
+import { useCallback } from "react";
 
 export interface SignUpCredentials {
   name: string;
@@ -70,14 +71,22 @@ export const schema = yup.object<SignUpCredentials>({
 
 export function SignUp() {
   const navigation = useNavigation<StackProps>();
-  const { setUser, signInUser } = useUserContext() as UserContext;
+  const { token, setUser, signInUser } = useUserContext() as UserContext;
+
+  useFocusEffect(
+    useCallback(() => {
+      if (token) {
+        navigation.navigate("Home");
+      }
+    }, [token])
+  );
 
   async function handleSignUp(data: SignUpCredentials) {
     try {
       const { data: message } = await api.post("/signup", data);
 
       setUser(data);
-      await signInUser();
+      await signInUser({ email: data.email, password: data.password });
       
       Alert.alert(message);
       navigation.navigate("Home"); 
