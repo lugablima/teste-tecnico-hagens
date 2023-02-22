@@ -6,16 +6,22 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackProps } from "../../App";
 import { useCallback } from "react";
 import { UserContext, useUserContext } from "../contexts/UserContext";
+import { CameraContext, useCameraContext } from "../contexts/CameraContext";
 
 export function Entry() {
     const navigation =  useNavigation<StackProps>();
     const { token } = useUserContext() as UserContext;
+    const { hasPermission, requestCameraPermission } = useCameraContext() as CameraContext;
 
     useFocusEffect(useCallback(() => {
         if(token) {
             navigation.navigate("Home");
         }
-    }, [token]));
+
+        if(hasPermission === null) {
+            requestCameraPermission();
+        }
+    }, [token, hasPermission]));
 
     return (
         <View className="flex-1 items-center bg-background px-5 pt-32">

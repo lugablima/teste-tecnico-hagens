@@ -2,7 +2,7 @@ import { View } from "react-native";
 import { Header } from "../components/Header";
 import { Card } from "../components/Card";
 import { ProfileHeader } from "../components/ProfileHeader";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { UserContext, useUserContext } from "../contexts/UserContext";
 import { Loading } from "../components/Loading";
 import { Menu } from "./Menu";

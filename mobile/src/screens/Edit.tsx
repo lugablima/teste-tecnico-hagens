@@ -21,10 +21,13 @@ import { isAxiosError } from "axios";
 import { useCallback, useState } from "react";
 import { Menu } from "./Menu";
 import { clearBlankAttributes } from "../utils/clearBlankAttributes";
+import { CameraContext, useCameraContext } from "../contexts/CameraContext";
+import { ExpoCamera } from "../components/ExpoCamera";
 
 export function Edit() {
   const navigation = useNavigation<StackProps>();
   const { user, config } = useUserContext() as UserContext;
+  const { hasPermission, openCamera } = useCameraContext() as CameraContext;
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
   useFocusEffect(
@@ -48,7 +51,7 @@ export function Edit() {
   async function handleEdit(data: SignUpCredentials) {
     try {
       data = clearBlankAttributes<SignUpCredentials>(data);
-
+      
       const { data: message } = await api.patch("/users", data, config);
 
       Alert.alert(message);
@@ -109,6 +112,7 @@ export function Edit() {
     <>
       <Header setShowMenu={setShowMenu} />
       {showMenu && <Menu setShowMenu={setShowMenu} />}
+      {(hasPermission && openCamera) && <ExpoCamera />}
       <ScrollView keyboardShouldPersistTaps="always" className="mt-16">
         <View className="w-screen flex-1 bg-background px-5">
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
