@@ -16,8 +16,22 @@ model User {
   phone     String
   email     String   @unique
   password  String
+  imageId   String?  @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  image Image? @relation(fields: [imageId], references: [id])
+
   @@map("users")
+}
+
+model Image {
+  id   String @id @default(uuid())
+  name String
+  type String
+  data String
+
+  User User[]
+
+  @@map("images")
 }
