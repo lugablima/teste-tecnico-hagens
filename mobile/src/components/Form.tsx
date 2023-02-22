@@ -3,6 +3,7 @@ import {
   Controller,
   FieldValues,
   Path,
+  DeepPartial,
 } from "react-hook-form";
 import { Text, TextInput, TextInputProps, View } from "react-native";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,6 +11,7 @@ import * as yup from "yup";
 
 import { Button, ButtonProps } from "./Button";
 import { ReactNode } from "react";
+import { Input } from "./Input";
 
 interface Input<K> extends TextInputProps {
   id: string;
@@ -22,6 +24,7 @@ export interface FormData<K> {
   onSubmit: (data: K) => void;
   inputs: Input<K>[];
   button: ButtonProps;
+  defaultValues?: DeepPartial<K> 
 }
 
 interface FormProps<K> {
@@ -39,6 +42,7 @@ export function Form<T extends FieldValues>({
     formState: { errors },
   } = useForm<T>({
     resolver: yupResolver(schema),
+    defaultValues: formData.defaultValues
   });
 
   return (
@@ -53,7 +57,7 @@ export function Form<T extends FieldValues>({
               control={control}
               name={controllerName}
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
+                <Input
                   onChangeText={(text) =>
                     maskField ? onChange(maskField(text)) : onChange(text)
                   }
@@ -61,10 +65,7 @@ export function Form<T extends FieldValues>({
                   value={value}
                   placeholder={placeholder}
                   {...rest}
-                  className="w-full h-14 p-4 bg-background border rounded-lg placeholder:font-regular placeholder:text-base placeholder:text-black/50"
-                  style={{
-                    borderColor: errors[controllerName] ? "#EF4444" : "#D8DADC",
-                  }}
+                  isError={errors[controllerName] && true}  
                 />
               )}
             />
