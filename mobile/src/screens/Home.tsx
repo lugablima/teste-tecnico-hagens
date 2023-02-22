@@ -13,7 +13,7 @@ export function Home() {
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
   useFocusEffect(useCallback(() => {
-    if (!user) getUserInfos();
+    getUserInfos();
     setShowMenu(false);
   }, []));
 
