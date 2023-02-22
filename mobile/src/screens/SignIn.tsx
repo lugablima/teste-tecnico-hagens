@@ -37,6 +37,7 @@ export function SignIn() {
     email: yup.string().email("E-mail inválido").required("Campo obrigatório"),
     password: yup
       .string()
+      .trim()
       .min(6, "A senha deve ter no mínimo 6 caracteres")
       .required("Campo obrigatório"),
   });

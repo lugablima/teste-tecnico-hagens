@@ -52,10 +52,10 @@ export function StarImage() {
   );
 }
 
-const phoneRegex = /^\([1-9]{2}\) [1-9]{1}[0-9]{4}\-[0-9]{4}$/;
+export const phoneRegex = /^\([1-9]{2}\) [1-9]{1}[0-9]{4}\-[0-9]{4}$/;
 
-export const schema = yup.object<SignUpCredentials>({
-  name: yup.string().required("Campo obrigatório"),
+const schema = yup.object<SignUpCredentials>({
+  name: yup.string().trim().required("Campo obrigatório"),
   phone: yup
     .string()
     .matches(
@@ -66,6 +66,7 @@ export const schema = yup.object<SignUpCredentials>({
   email: yup.string().email("E-mail inválido").required("Campo obrigatório"),
   password: yup
     .string()
+    .trim()
     .min(6, "A senha deve ter no mínimo 6 caracteres")
     .required("Campo obrigatório"),
 });
