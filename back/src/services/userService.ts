@@ -2,9 +2,9 @@ import * as userRepository from "../repositories/userRepository";
 import * as imageRepository from "../repositories/imageRepository";
 import * as errorHandling from "../errors/errorHandlingUtils";
 import { excludeTypeProperties } from "../utils/excludeTypeProperties";
-import { EditUserPayload, GetInfosResponse } from "../types/userType";
+import { EditUserPayload, GetInfosResponse, UserModified } from "../types/userType";
 import { decrypt, encrypt } from "../utils/cryptographyUtils";
-import { User } from "@prisma/client";
+import { Image, User } from "@prisma/client";
 import { generateHashPassword, unformatPhone, validateIfEmailDoesNotExist } from "./authService";
 import { CreateImage, ImagePayload } from "../types/imageType";
 import { clearUndefinedProperties } from "../utils/clearUndefinedProperties";
@@ -23,12 +23,29 @@ function formatPhone(phone: string): string {
 	return phone.replace(/^(\d{2})(\d{5})(\d{4})$/g, "($1) $2-$3");
 }
 
-function formatUser(user: User): GetInfosResponse {
+async function addImageProperty(user: UserModified): Promise<GetInfosResponse> {
+	const { id, name, type, data } = (await imageRepository.findOneById(user.imageId as string)) as Image;
+
+	const decryptedImage: Image = { id, name: decrypt(name), type, data: decrypt(data) };
+
+	const newUser = excludeTypeProperties(user, "imageId") as GetInfosResponse;
+	newUser.image = decryptedImage;
+
+	return newUser;
+}
+
+async function formatUser(user: User): Promise<GetInfosResponse> {
 	const formatedUser = { ...user, phone: decrypt(user.phone) };
 
 	formatedUser.phone = formatPhone(formatedUser.phone);
 
-	return excludeTypeProperties(formatedUser, "password", "createdAt", "updatedAt");
+	const newUser = excludeTypeProperties(formatedUser, "password", "createdAt", "updatedAt");
+
+	if (!newUser.imageId) {
+		return excludeTypeProperties(newUser, "imageId") as GetInfosResponse;
+	}
+
+	return await addImageProperty(newUser);
 }
 
 async function formatEditUser(user: EditUserPayload): Promise<EditUserPayload> {

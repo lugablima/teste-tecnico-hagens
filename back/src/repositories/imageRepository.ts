@@ -1,6 +1,14 @@
 import { prisma } from "../database/postgres";
 import { CreateImage } from "../types/imageType";
 
+export async function findOneById(id: string) {
+	return prisma.image.findUnique({
+		where: {
+			id,
+		},
+	});
+}
+
 export async function deleteOne(id: string) {
 	return prisma.image.delete({
 		where: {
