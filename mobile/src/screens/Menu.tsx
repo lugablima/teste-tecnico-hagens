@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackProps } from "../../App";
 import { removeAsyncStorageToken } from "../utils/asyncStorageUtils";
 import { UserContext, useUserContext } from "../contexts/UserContext";
+import { CameraContext, useCameraContext } from "../contexts/CameraContext";
 
 interface MenuProps {
   setShowMenu: Dispatch<SetStateAction<boolean>>;
@@ -16,11 +17,13 @@ export function Menu({ setShowMenu }: MenuProps) {
   const SIDEBAR_WIDTH = Dimensions.get("screen").width - 260;
   const navigation = useNavigation<StackProps>();
   const { resetUserAndTokenStates } = useUserContext() as UserContext;
+  const { resetCameraPermission } = useCameraContext() as CameraContext;
 
   async function logOutUser() {
     await removeAsyncStorageToken();
 
     resetUserAndTokenStates();
+    resetCameraPermission();
 
     navigation.navigate("Entry");
   }
