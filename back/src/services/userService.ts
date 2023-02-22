@@ -1,10 +1,13 @@
 import * as userRepository from "../repositories/userRepository";
+import * as imageRepository from "../repositories/imageRepository";
 import * as errorHandling from "../errors/errorHandlingUtils";
 import { excludeTypeProperties } from "../utils/excludeTypeProperties";
 import { EditUserPayload, GetInfosResponse } from "../types/userType";
 import { decrypt, encrypt } from "../utils/cryptographyUtils";
 import { User } from "@prisma/client";
 import { generateHashPassword, unformatPhone, validateIfEmailDoesNotExist } from "./authService";
+import { CreateImage, ImagePayload } from "../types/imageType";
+import { clearUndefinedProperties } from "../utils/clearUndefinedProperties";
 
 async function validateIfUserExists(userId: string): Promise<User> {
 	const user = await userRepository.findById(userId);
@@ -41,10 +44,23 @@ async function formatEditUser(user: EditUserPayload): Promise<EditUserPayload> {
 	return user;
 }
 
-function validateIfEditPayloadIsEmpty(userInfos: EditUserPayload) {
-	const arrKeys = Object.keys(userInfos);
+async function deletePreviousImage(imageId: string | null) {
+	if (!imageId) return;
 
-	if (!arrKeys.length) {
+	await imageRepository.deleteOne(imageId);
+}
+
+async function createImage({ name, type, data }: CreateImage) {
+	return await imageRepository.createOne({ name: encrypt(name), type, data: encrypt(data) });
+}
+
+function validateIfEditPayloadIsEmpty(userInfos: EditUserPayload, image: ImagePayload) {
+	const arrKeysUser = Object.keys(userInfos);
+
+	const cleanImage = clearUndefinedProperties<ImagePayload>(image);
+	const arrKeysImage = Object.keys(cleanImage);
+
+	if (!arrKeysUser.length && !arrKeysImage.length) {
 		throw errorHandling.badRequestError("Payload da request está vazio.");
 	}
 }
@@ -55,13 +71,19 @@ export async function getInfos(userId: string): Promise<GetInfosResponse> {
 	return formatUser(user);
 }
 
-export async function edit(userId: string, userInfos: EditUserPayload) {
-	await validateIfUserExists(userId);
+export async function edit(userId: string, userInfos: EditUserPayload, image: ImagePayload) {
+	const storedUser = await validateIfUserExists(userId);
 
-	validateIfEditPayloadIsEmpty(userInfos);
+	validateIfEditPayloadIsEmpty(userInfos, image);
 
 	if (userInfos.email) {
 		await validateIfEmailDoesNotExist(userInfos.email);
+	}
+
+	if (image.name && image.type && image.data) {
+		await deletePreviousImage(storedUser.imageId);
+		const { id: imageId } = await createImage(image as CreateImage);
+		userInfos.imageId = imageId;
 	}
 
 	const formattedUser = await formatEditUser(userInfos);
