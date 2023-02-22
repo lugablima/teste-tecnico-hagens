@@ -5,10 +5,7 @@ import {
   Inter_600SemiBold,
   Inter_700Bold,
 } from "@expo-google-fonts/inter";
-import {
-  NavigationContainer,
-  DefaultTheme,
-} from "@react-navigation/native";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
@@ -21,6 +18,7 @@ import { SignIn } from "./src/screens/SignIn";
 import { Home } from "./src/screens/Home";
 import { Edit } from "./src/screens/Edit";
 import { UserProvider } from "./src/contexts/UserContext";
+import { CameraProvider } from "./src/contexts/CameraContext";
 
 type NavigationStackProps = {
   Entry: undefined;
@@ -50,19 +48,21 @@ export default function App() {
 
   return (
     <UserProvider>
-      <NavigationContainer theme={DefaultTheme}>
-        <Navigator
-          initialRouteName="Entry"
-          screenOptions={{ headerShown: false }}
-        >
-          <Screen name="Entry" component={Entry} />
-          <Screen name="SignUp" component={SignUp} />
-          <Screen name="SignIn" component={SignIn} />
-          <Screen name="Home" component={Home} />
-          <Screen name="Edit" component={Edit} />
-        </Navigator>
-        <StatusBar barStyle="light-content" backgroundColor="black" />
-      </NavigationContainer>
+      <CameraProvider>
+        <NavigationContainer theme={DefaultTheme}>
+          <Navigator
+            initialRouteName="Entry"
+            screenOptions={{ headerShown: false }}
+          >
+            <Screen name="Entry" component={Entry} />
+            <Screen name="SignUp" component={SignUp} />
+            <Screen name="SignIn" component={SignIn} />
+            <Screen name="Home" component={Home} />
+            <Screen name="Edit" component={Edit} />
+          </Navigator>
+          <StatusBar barStyle="light-content" backgroundColor="black" />
+        </NavigationContainer>
+      </CameraProvider>
     </UserProvider>
   );
 }
