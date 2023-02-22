@@ -11,17 +11,27 @@ import {
 import { Alert } from "react-native";
 import { api } from "../config/axios";
 import { SignInCredentials } from "../screens/SignIn";
-import { fetchAsyncStorageToken, setAsyncStorageToken } from "../utils/asyncStorageUtils";
+import {
+  fetchAsyncStorageToken,
+  setAsyncStorageToken,
+} from "../utils/asyncStorageUtils";
 
 interface UserProviderProps {
   children: ReactNode;
 }
 
-interface User {
+export interface Image {
+  name: string;
+  type: string;
+  data: string;
+}
+
+export interface User {
   name: string;
   phone: string;
   email: string;
   password?: string;
+  image?: Image;
 }
 
 export interface UserContext {
@@ -30,6 +40,7 @@ export interface UserContext {
   token: string | null;
   setToken: Dispatch<SetStateAction<string | null>>;
   config: AxiosRequestConfig;
+  configEdit: AxiosRequestConfig;
   signInUser: (data: SignInCredentials) => Promise<void>;
   getUserInfos: () => Promise<void>;
   resetUserAndTokenStates: () => void;
@@ -46,6 +57,13 @@ export function UserProvider({ children }: UserProviderProps) {
   const config: AxiosRequestConfig = {
     headers: {
       authorization: `Bearer ${token}`,
+    },
+  };
+
+  const configEdit: AxiosRequestConfig = {
+    headers: {
+      authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
     },
   };
 
@@ -74,19 +92,28 @@ export function UserProvider({ children }: UserProviderProps) {
   }
 
   useEffect(() => {
-    fetchAsyncStorageToken()
-      .then((token) => setToken(token));
+    fetchAsyncStorageToken().then((token) => setToken(token));
   }, []);
 
   useEffect(() => {
-    if(token) {
+    if (token) {
       setAsyncStorageToken(token);
     }
   }, [token]);
 
   return (
     <UserContext.Provider
-      value={{ user, setUser, token, setToken, config, signInUser, getUserInfos, resetUserAndTokenStates }}
+      value={{
+        user,
+        setUser,
+        token,
+        setToken,
+        config,
+        configEdit,
+        signInUser,
+        getUserInfos,
+        resetUserAndTokenStates,
+      }}
     >
       {children}
     </UserContext.Provider>
