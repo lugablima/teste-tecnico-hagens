@@ -5,7 +5,7 @@ import {
   Path,
   DeepPartial,
 } from "react-hook-form";
-import { Text, TextInput, TextInputProps, View } from "react-native";
+import { Text, TextInputProps, View } from "react-native";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
@@ -77,7 +77,7 @@ export function Form<T extends FieldValues>({
           </View>
         )
       )}
-
+      
       <Button
         buttonStyle={formData.button.buttonStyle}
         title={formData.button.title}
