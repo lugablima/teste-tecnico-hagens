@@ -142,6 +142,8 @@ HTTP/1.1 200 OK
 }
 ```
 
+`Se o usuário não tiver nenhuma imagem cadastrada no sistema, o campo **image** da response não será enviado`
+
 | Body             |  Code      |  Description                          |
 | :--------------- | :-------   | :------------------------------------ |
 | `json`           |   `200`    | **OK**                                |
@@ -160,11 +162,8 @@ Nesta rota, é possível alterar os dados do usuário, fornecendo **pelo menos u
 | Headers         | Tipo     | Descrição                                   |
 | :-------------- | :------- | :------------------------------------------ |
 | `Authorization` | `string` | **Obrigatório**. Token JWT.                 |
-| `image`         | `file`   | **Opcional**. Arquivo de imagem para upload.|
 
 `O campo Authorization deve ter o seguinte formato: Bearer token_JWT`
-
-`O campo image é opcional e é designado para fazer o upload da imagem do usuário, para isso, utilize algum REST API Client (Insomnia, Postman, etc) que possua suporte a este tipo de operação`
 
 ```json
 {
@@ -174,6 +173,8 @@ Nesta rota, é possível alterar os dados do usuário, fornecendo **pelo menos u
     "password": "123456"
 }
 ```
+
+`É possível adicionar um campo image (opcional) ao payload da requisição para fazer o upload da imagem do usuário, para isso, utilize algum REST API Client (Insomnia, Postman, etc) que possua suporte a este tipo de operação`
 
 #### Resposta
 
@@ -217,9 +218,7 @@ HTTP/1.1 200 OK
     | `POSTGRES_DATABASE`  | nome do banco de dados                             |
     | `DATABASE_URL`       | URL de conexão do postgres                         |
 
-    - É importante manter a variável `POSTGRES_HOST` como sendo igual a `postgres_hagens_dev`.
-    - Mantenha também a variável `POSTGRES_PORT` como sendo igual a `5432`.
-    - Certifique-se de que não há nenhuma aplicação rodando em `http://localhost:5432`.  
+    - É importante manter a variável `POSTGRES_HOST` como sendo igual a `postgres_hagens_dev`. 
 
 3. Instale as dependências do projeto:
 
