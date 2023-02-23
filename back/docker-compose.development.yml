@@ -9,6 +9,7 @@ services:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
       - postgres_hagens_data_dev:/var/lib/postgresql/data
+    command: postgres -p ${POSTGRES_PORT}
   
   node_app_hagens_dev:
     build: 
