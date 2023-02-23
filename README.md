@@ -34,7 +34,9 @@ Aplicativo de cadastro, login e edição de usuários, desenvolvido para o teste
 - Navegação entre as telas por meio de um menu lateral;
 - Edição dos dados do usuário;
 - Deslogar do aplicativo;  
-- Acesso à câmera do dispositivo para poder tirar uma foto de perfil;    
+- Acesso à câmera do dispositivo para poder tirar uma foto de perfil*;
+
+`*OBS: Para ter acesso à câmera, aprove a permissão de uso exibida no momento da inicialização do app e, na tela "Editar meus dados", toque na foto de perfil.`
 
 ## 🚀 Rodando a Aplicação
   
