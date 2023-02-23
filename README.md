@@ -9,7 +9,7 @@ Aplicativo de cadastro, login e edição de usuários, desenvolvido para o teste
 ## 📑 Índice
 
 - [🧰 Tecnologias e conceitos utilizados](#-tecnologias-e-conceitos-utilizados)
-- [🧭 Funcionalidades](#funcionalidades)
+- [🧭 Funcionalidades](#-funcionalidades)
 - [🚀 Rodando a Aplicação](#-rodando-a-aplicação)
 
 ## 🧰 Tecnologias e conceitos utilizados
